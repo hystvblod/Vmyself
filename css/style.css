@@ -536,6 +536,7 @@ button, input, select, textarea{ font:inherit; }
 .modal{
   position:fixed;
   inset:0;
+  overflow:hidden;
   z-index:100;
   background: rgba(237,245,252,.65);
   backdrop-filter: blur(14px);
@@ -550,6 +551,9 @@ button, input, select, textarea{ font:inherit; }
 .lock-card,
 .modal-card{
   width:min(620px, 100%);
+  max-height:calc(100vh - 36px);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 
 .brand-mark{
