@@ -7,28 +7,6 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <div id="appLock" class="lock-screen hidden" aria-hidden="true">
-    <div class="lock-card card glass">
-      <div class="brand-mark">V</div>
-      <h1 data-i18n="lock.title"></h1>
-      <p class="muted" data-i18n="lock.subtitle"></p>
-
-      <div class="pin-dots" id="pinDots" aria-hidden="true">
-        <span></span><span></span><span></span><span></span>
-      </div>
-
-      <input id="pinInput" class="field center" inputmode="numeric" maxlength="4" autocomplete="off" data-i18n-placeholder="lock.pinPlaceholder" />
-      <button id="unlockBtn" class="btn primary" data-i18n="lock.unlock"></button>
-      <button id="openRecoveryBtn" class="btn ghost" data-i18n="lock.forgot"></button>
-
-      <div id="recoveryBox" class="recovery-box hidden">
-        <label class="label" id="recoveryQuestionLabel"></label>
-        <input id="recoveryAnswerInput" class="field" autocomplete="off" data-i18n-placeholder="lock.answerPlaceholder" />
-        <button id="recoveryCheckBtn" class="btn soft" data-i18n="lock.recover"></button>
-      </div>
-    </div>
-  </div>
-
   <div id="onboardingModal" class="modal hidden" aria-hidden="true">
     <div class="modal-card card">
       <div class="section-heading">
@@ -38,7 +16,7 @@
         </div>
       </div>
 
-      <div class="grid-2">
+      <div class="grid-2 onboarding-grid">
         <div class="field-wrap">
           <label class="label" data-i18n="onboarding.name"></label>
           <input id="onbName" class="field" maxlength="40" />
@@ -56,30 +34,6 @@
           </select>
         </div>
         <div class="field-wrap">
-          <h3>Quels sont vos objectifs ?</h3>
-          <div class="goal-list">
-            <label><input type="checkbox" name="onbGoals" value="confidence"> Retrouver confiance en moi</label>
-            <label><input type="checkbox" name="onbGoals" value="health"> Améliorer ma santé</label>
-            <label><input type="checkbox" name="onbGoals" value="energy"> Avoir plus d’énergie</label>
-            <label><input type="checkbox" name="onbGoals" value="body"> Me sentir mieux dans mon corps</label>
-            <label><input type="checkbox" name="onbGoals" value="habit"> Créer de meilleures habitudes</label>
-          </div>
-          <h3>Protéger l’application ?</h3>
-          <label><input type="radio" name="lockapp" value="yes"> Oui</label>
-          <label><input type="radio" name="lockapp" value="no" checked> Non</label>
-          <div id="pinBlock">
-            <input id="onbPin" type="password" maxlength="6" placeholder="Choisir un code PIN">
-            <input id="onbPinConfirm" type="password" maxlength="6" placeholder="Confirmer le code PIN">
-          </div>
-          <select id="onbQuestion" class="field">
-            <option>Nom de votre premier animal ?</option>
-            <option>Ville de naissance ?</option>
-            <option>Couleur préférée ?</option>
-            <option>Plat préféré enfant ?</option>
-          </select>
-          <input id="onbAnswer" class="field" type="text" placeholder="Votre réponse">
-        </div>
-        <div class="field-wrap">
           <label class="label" data-i18n="onboarding.height"></label>
           <input id="onbHeight" class="field" type="number" min="120" max="230" />
         </div>
@@ -87,19 +41,59 @@
           <label class="label" data-i18n="onboarding.weight"></label>
           <input id="onbWeight" class="field" type="number" min="30" max="300" step="0.1" />
         </div>
+        <div class="field-wrap">
+          <label class="label" data-i18n="onboarding.targetWeight"></label>
+          <input id="onbTargetWeight" class="field" type="number" min="30" max="300" step="0.1" />
+        </div>
+
         <div class="field-wrap full">
-          <label class="label">Quels sont vos objectifs ?</label>
-          <textarea id="onbWhy" class="field area" rows="3"></textarea>
+          <label class="label" data-i18n="onboarding.goalsTitle"></label>
+          <div class="goal-list">
+            <label><input type="checkbox" name="onbGoals" value="confidence"> <span data-i18n="goals.confidence"></span></label>
+            <label><input type="checkbox" name="onbGoals" value="health"> <span data-i18n="goals.health"></span></label>
+            <label><input type="checkbox" name="onbGoals" value="energy"> <span data-i18n="goals.energy"></span></label>
+            <label><input type="checkbox" name="onbGoals" value="body"> <span data-i18n="goals.body"></span></label>
+            <label><input type="checkbox" name="onbGoals" value="habit"> <span data-i18n="goals.habit"></span></label>
+          </div>
+        </div>
+
+        <div class="field-wrap full">
+          <label class="label" data-i18n="onboarding.lockTitle"></label>
+          <div class="radio-row">
+            <label class="choice-chip"><input type="radio" name="lockapp" value="yes"> <span data-i18n="onboarding.lockYes"></span></label>
+            <label class="choice-chip"><input type="radio" name="lockapp" value="no" checked> <span data-i18n="onboarding.lockNo"></span></label>
+          </div>
+        </div>
+
+        <div id="pinBlock" class="field-wrap full hidden-soft">
+          <div class="grid-2">
+            <div class="field-wrap">
+              <label class="label" data-i18n="onboarding.pin"></label>
+              <input id="onbPin" class="field" type="password" inputmode="numeric" maxlength="6" data-i18n-placeholder="lock.pinPlaceholder">
+            </div>
+            <div class="field-wrap">
+              <label class="label" data-i18n="onboarding.pinConfirm"></label>
+              <input id="onbPinConfirm" class="field" type="password" inputmode="numeric" maxlength="6" data-i18n-placeholder="lock.pinPlaceholder">
+            </div>
+          </div>
+        </div>
+
+        <div id="recoverySetupWrap" class="field-wrap full hidden-soft">
+          <div class="grid-2">
+            <div class="field-wrap">
+              <label class="label" data-i18n="onboarding.question"></label>
+              <select id="onbQuestion" class="field"></select>
+            </div>
+            <div class="field-wrap">
+              <label class="label" data-i18n="onboarding.answer"></label>
+              <input id="onbAnswer" class="field" type="text" maxlength="60" data-i18n-placeholder="lock.answerPlaceholder">
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="modal-actions">
-        <div class="onboard-actions">
-          <button id="btnContinue" type="submit" class="primary-btn">
-            Continuer
-          </button>
-        </div>
-        <button id="saveOnboardingBtn" class="btn primary" data-i18n="onboarding.save"></button>
+      <div class="modal-actions onboarding-actions">
+        <button id="btnContinue" class="btn primary wide" data-i18n="onboarding.save"></button>
       </div>
     </div>
   </div>
@@ -273,6 +267,7 @@
   <script src="js/purchases.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/shared.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

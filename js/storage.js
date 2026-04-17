@@ -5,7 +5,7 @@ window.VMStorage = (() => {
     settings: {
       language: 'fr',
       hideSensitive: false,
-      lockOnOpen: true,
+      lockOnOpen: false,
       premium: false,
       noAds: false
     },
@@ -14,6 +14,7 @@ window.VMStorage = (() => {
       age: '',
       sex: 'female',
       goal: 'health',
+      goals: ['health'],
       why: '',
       heightCm: '',
       weightKg: '',

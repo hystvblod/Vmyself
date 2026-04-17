@@ -19,6 +19,16 @@ window.VMApp = (() => {
       "Le mieux-être se construit avec des gestes simples répétés.",
       "Tu peux tomber un peu et quand même continuer.",
       "Respire : tu es déjà en train de reprendre la main."
+    ],
+    body: [
+      "Tu n’as pas besoin d’aimer chaque détail pour prendre soin de toi aujourd’hui.",
+      "Le confort dans ton corps se construit avec de petits gestes répétés.",
+      "Tu peux viser le mieux-être sans te maltraiter."
+    ],
+    habit: [
+      "Une habitude calme répétée vaut plus qu’un grand élan de deux jours.",
+      "Revenir à l’essentiel est déjà une vraie avancée.",
+      "La régularité douce change plus que la pression."
     ]
   };
 
@@ -43,54 +53,8 @@ window.VMApp = (() => {
     "Choisis le prochain bon geste, pas une punition."
   ];
 
-  function todayKey(){
-    return new Date().toISOString().slice(0,10);
-  }
-
-  function calcBMI(weightKg, heightCm){
-    const w = Number(weightKg), h = Number(heightCm) / 100;
-    if(!w || !h) return null;
-    return w / (h*h);
-  }
-
-  function bmiLabel(bmi){
-    if(bmi == null) return '';
-    if(bmi < 18.5) return 'Sous la zone santé';
-    if(bmi < 25) return 'Zone santé';
-    if(bmi < 30) return 'Surpoids';
-    if(bmi < 35) return 'Obésité I';
-    if(bmi < 40) return 'Obésité II';
-    return 'Obésité III';
-  }
-
-  function calcWHtR(waistCm, heightCm){
-    const waist = Number(waistCm), height = Number(heightCm);
-    if(!waist || !height) return null;
-    return waist / height;
-  }
-
-  function whtrLabel(value){
-    if(value == null) return '';
-    if(value < 0.4) return 'Très bas';
-    if(value < 0.5) return 'Repère correct';
-    if(value < 0.6) return 'À surveiller';
-    return 'Élevé';
-  }
-
-  function estimateCalories(profile){
-    const weight = Number(profile.weightKg);
-    const height = Number(profile.heightCm);
-    const age = Number(profile.age);
-    if(!weight || !height || !age) return null;
-    const isMale = profile.sex === 'male';
-    const bmr = isMale
-      ? (10 * weight) + (6.25 * height) - (5 * age) + 5
-      : (10 * weight) + (6.25 * height) - (5 * age) - 161;
-    return Math.round(bmr * 1.2 - 300);
-  }
-
   function getTodayJournal(state){
-    return state.journal[todayKey()] || {
+    return state.journal[VMShared.todayKey()] || {
       waterL: 0,
       sleepH: 0,
       meals: [],
@@ -98,6 +62,18 @@ window.VMApp = (() => {
       moodColor: 'yellow',
       note: ''
     };
+  }
+
+  function setModalState(modal, isOpen){
+    if(!modal) return;
+    modal.classList.toggle('hidden', !isOpen);
+    modal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    document.body.classList.toggle('modal-open', isOpen && !document.getElementById('appLock')?.classList.contains('hidden'));
+    if(isOpen){
+      document.body.classList.add('modal-open');
+    }else if(document.getElementById('crackModal')?.classList.contains('hidden') && document.getElementById('onboardingModal')?.classList.contains('hidden') && document.getElementById('appLock')?.classList.contains('hidden')){
+      document.body.classList.remove('modal-open');
+    }
   }
 
   function renderHome(){
@@ -108,8 +84,8 @@ window.VMApp = (() => {
     const state = VMStorage.read();
     const journal = getTodayJournal(state);
     const hide = !!state.settings.hideSensitive;
-    const bmi = calcBMI(journal.weightKg || state.profile.weightKg, state.profile.heightCm);
-    const whtr = calcWHtR(state.profile.waistCm, state.profile.heightCm);
+    const bmi = VMShared.calcBMI(journal.weightKg || state.profile.weightKg, state.profile.heightCm);
+    const whtr = VMShared.calcWHtR(state.profile.waistCm, state.profile.heightCm);
     const calories = (journal.meals || []).reduce((sum, meal) => sum + Number(meal.calories || 0), 0);
     const goal = state.profile.goal || 'health';
     const encouragementList = encouragements[goal] || encouragements.health;
@@ -127,11 +103,11 @@ window.VMApp = (() => {
     document.getElementById('weightValue').textContent = VMUI.sensitiveText(journal.weightKg ? `${Number(journal.weightKg).toFixed(1)} kg` : '—', hide);
     document.getElementById('weightTrend').textContent = state.profile.targetWeightKg ? `Objectif ${state.profile.targetWeightKg} kg` : 'Ajoute un objectif';
     document.getElementById('bmiValue').textContent = VMUI.sensitiveText(bmi ? bmi.toFixed(1) : '—', hide);
-    document.getElementById('bmiLabel').textContent = bmiLabel(bmi);
+    document.getElementById('bmiLabel').textContent = VMShared.bmiLabel(bmi);
     document.getElementById('waistValue').textContent = VMUI.sensitiveText(whtr ? whtr.toFixed(2) : '—', hide);
-    document.getElementById('waistLabel').textContent = whtrLabel(whtr);
+    document.getElementById('waistLabel').textContent = VMShared.whtrLabel(whtr);
     document.getElementById('caloriesValue').textContent = `${calories} kcal`;
-    const target = estimateCalories(state.profile);
+    const target = VMShared.estimateCalories(state.profile);
     document.getElementById('caloriesLabel').textContent = target ? `Cible ~ ${target} kcal` : 'Complète ton profil';
 
     const waterGoal = 2;
@@ -146,7 +122,8 @@ window.VMApp = (() => {
     const statusTitle = document.getElementById('statusTitle');
     const statusText = document.getElementById('statusText');
     const statusBadge = document.getElementById('dailyStatusBadge');
-    const label = VMI18n.t(`status.${journal.moodColor === 'green-dark' ? 'greenDark' : journal.moodColor === 'green-light' ? 'greenLight' : journal.moodColor}`);
+    const key = journal.moodColor === 'green-dark' ? 'greenDark' : journal.moodColor === 'green-light' ? 'greenLight' : journal.moodColor;
+    const label = VMI18n.t(`status.${key}`);
     statusDot.className = `status-dot ${VMUI.colorClassByStatus(journal.moodColor)}`;
     statusTitle.textContent = label;
     statusText.textContent = advice;
@@ -178,41 +155,44 @@ window.VMApp = (() => {
         return s;
       });
       renderHome();
-    });
+    }, { once:true });
 
     document.getElementById('openOnboardingBtn')?.addEventListener('click', () => {
       openOnboarding();
-    });
+    }, { once:true });
 
     document.getElementById('crackBtn')?.addEventListener('click', () => {
       const support = crackSupports[Math.floor(Math.random() * crackSupports.length)];
       document.getElementById('crackSupportText').textContent = support;
-      document.getElementById('motivationCard').textContent = encouragements[state.profile.goal || 'health'][0];
+      document.getElementById('motivationCard').textContent = encouragements[state.profile.goal || 'health'][0] || encouragements.health[0];
       document.getElementById('crackTips').innerHTML = crackTips.map((tip) => `<div class="tip-card">${tip}</div>`).join('');
-      document.getElementById('crackModal')?.classList.remove('hidden');
+      setModalState(document.getElementById('crackModal'), true);
       VMAds.maybeInterstitial('crack');
-    });
+    }, { once:true });
 
     document.getElementById('closeCrackBtn')?.addEventListener('click', () => {
-      document.getElementById('crackModal')?.classList.add('hidden');
-    });
+      setModalState(document.getElementById('crackModal'), false);
+      bindHome(VMStorage.read());
+    }, { once:true });
 
     document.getElementById('saveSmallVictoryBtn')?.addEventListener('click', () => {
-      addVictory("J’ai repris la main après un moment difficile.");
-      document.getElementById('crackModal')?.classList.add('hidden');
-    });
+      VMShared.addVictory("J’ai repris la main après un moment difficile.");
+      setModalState(document.getElementById('crackModal'), false);
+      renderHome();
+    }, { once:true });
 
-    document.getElementById('saveOnboardingBtn')?.addEventListener('click', saveOnboarding);
+    document.getElementById('btnContinue')?.addEventListener('click', saveOnboarding, { once:true });
+    document.querySelectorAll('input[name="lockapp"]').forEach((radio) => {
+      if(!radio.dataset.bound){
+        radio.dataset.bound = '1';
+        radio.addEventListener('change', togglePinBlock);
+      }
+    });
   }
 
   function maybeShowOnboarding(state){
     if(!state.meta.onboarded){
       openOnboarding();
-    }
-    const select = document.getElementById('onbQuestion');
-    if(select && !select.dataset.filled){
-      fillRecoveryQuestions(select, state.profile.recoveryQuestionKey || 'pet');
-      select.dataset.filled = '1';
     }
   }
 
@@ -220,7 +200,7 @@ window.VMApp = (() => {
     const state = VMStorage.read();
     const modal = document.getElementById('onboardingModal');
     if(!modal) return;
-    modal.classList.remove('hidden');
+    setModalState(modal, true);
     fillRecoveryQuestions(document.getElementById('onbQuestion'), state.profile.recoveryQuestionKey || 'pet');
     document.getElementById('onbName').value = state.profile.name || '';
     document.getElementById('onbAge').value = state.profile.age || '';
@@ -231,8 +211,9 @@ window.VMApp = (() => {
     });
     document.getElementById('onbHeight').value = state.profile.heightCm || '';
     document.getElementById('onbWeight').value = state.profile.weightKg || '';
-    document.getElementById('onbWhy').value = state.profile.why || '';
+    document.getElementById('onbTargetWeight').value = state.profile.targetWeightKg || '';
     document.getElementById('onbPin').value = state.profile.pin || '';
+    document.getElementById('onbPinConfirm').value = state.profile.pin || '';
     document.getElementById('onbQuestion').value = state.profile.recoveryQuestionKey || 'pet';
     document.getElementById('onbAnswer').value = state.profile.recoveryAnswer || '';
     const lockPref = state.profile.pin ? 'yes' : 'no';
@@ -248,7 +229,23 @@ window.VMApp = (() => {
     `).join('');
   }
 
-  function saveOnboarding(){
+  function validateOnboarding(payload, lockEnabled, pin, pinConfirm){
+    if(!payload.name || !payload.age || !payload.heightCm || !payload.weightKg){
+      return 'Complète au moins prénom, âge, taille et poids.';
+    }
+    if(!payload.goals.length){
+      return 'Choisis au moins un objectif.';
+    }
+    if(lockEnabled){
+      if(!/^\d{4,6}$/.test(pin)) return 'Choisis un code PIN de 4 à 6 chiffres.';
+      if(pin !== pinConfirm) return 'Les codes PIN ne correspondent pas.';
+      if(!payload.recoveryAnswer) return 'Ajoute une réponse de secours.';
+    }
+    return '';
+  }
+
+  function saveOnboarding(e){
+    if(e) e.preventDefault();
     const selectedGoals = Array.from(document.querySelectorAll('input[name="onbGoals"]:checked')).map((input) => input.value);
     const lockEnabled = document.querySelector('input[name="lockapp"]:checked')?.value === 'yes';
     const pin = (document.getElementById('onbPin').value || '').trim();
@@ -261,60 +258,42 @@ window.VMApp = (() => {
       goals: selectedGoals,
       heightCm: document.getElementById('onbHeight').value.trim(),
       weightKg: document.getElementById('onbWeight').value.trim(),
-      why: document.getElementById('onbWhy').value.trim(),
+      targetWeightKg: document.getElementById('onbTargetWeight').value.trim(),
+      why: selectedGoals.join(', '),
       pin: lockEnabled ? pin : '',
       recoveryQuestionKey: document.getElementById('onbQuestion').value,
-      recoveryAnswer: document.getElementById('onbAnswer').value.trim()
+      recoveryAnswer: lockEnabled ? document.getElementById('onbAnswer').value.trim() : ''
     };
-    if(lockEnabled && pin !== pinConfirm){
-      VMUI.toast('Les codes PIN ne correspondent pas.');
+
+    const validationMessage = validateOnboarding(payload, lockEnabled, pin, pinConfirm);
+    if(validationMessage){
+      VMUI.toast(validationMessage);
+      bindHome(VMStorage.read());
       return;
     }
-    if(!payload.name || !payload.heightCm || !payload.weightKg){
-      VMUI.toast('Complète au moins prénom, taille et poids.');
-      return;
-    }
+
     VMStorage.update((state) => {
       state.profile = { ...state.profile, ...payload };
+      state.settings.lockOnOpen = !!payload.pin;
       state.meta.onboarded = true;
       return state;
     });
-    document.getElementById('onboardingModal')?.classList.add('hidden');
+
+    setModalState(document.getElementById('onboardingModal'), false);
     VMUI.toast(VMI18n.t('toast.saved'));
     renderHome();
   }
-
-  function addVictory(text){
-    VMStorage.update((state) => {
-      state.victories.unshift({ text, date: VMUI.formatDate() });
-      state.victories = state.victories.slice(0, 50);
-      return state;
-    });
-    VMUI.toast(VMI18n.t('toast.saved'));
-    renderHome();
-  }
-
-  document.addEventListener('DOMContentLoaded', renderHome);
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('input[name="lockapp"]').forEach((radio) => {
-      radio.addEventListener('change', togglePinBlock);
-    });
-    togglePinBlock();
-  });
 
   function togglePinBlock(){
     const pinBlock = document.getElementById('pinBlock');
+    const recoveryWrap = document.getElementById('recoverySetupWrap');
     if(!pinBlock) return;
     const lockEnabled = document.querySelector('input[name="lockapp"]:checked')?.value === 'yes';
-    pinBlock.style.display = lockEnabled ? 'block' : 'none';
+    pinBlock.style.display = lockEnabled ? 'grid' : 'none';
+    if(recoveryWrap) recoveryWrap.style.display = lockEnabled ? 'grid' : 'none';
   }
 
-  document.getElementById("btnContinue")?.addEventListener("click",(e)=>{
-    e.preventDefault();
-    saveOnboarding();
-    window.location.href = "pages/home.html";
-  });
+  document.addEventListener('DOMContentLoaded', renderHome);
 
-  window.VMShared = { todayKey, calcBMI, bmiLabel, calcWHtR, whtrLabel, estimateCalories, addVictory };
-  return { renderHome };
+  return { renderHome, openOnboarding, saveOnboarding };
 })();
