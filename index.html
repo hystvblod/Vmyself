@@ -56,13 +56,28 @@
           </select>
         </div>
         <div class="field-wrap">
-          <label class="label" data-i18n="onboarding.goal"></label>
-          <select id="onbGoal" class="field">
-            <option value="confidence" data-i18n="goals.confidence"></option>
-            <option value="health" data-i18n="goals.health"></option>
-            <option value="energy" data-i18n="goals.energy"></option>
-            <option value="wellbeing" data-i18n="goals.wellbeing"></option>
+          <h3>Quels sont vos objectifs ?</h3>
+          <div class="goal-list">
+            <label><input type="checkbox" name="onbGoals" value="confidence"> Retrouver confiance en moi</label>
+            <label><input type="checkbox" name="onbGoals" value="health"> Améliorer ma santé</label>
+            <label><input type="checkbox" name="onbGoals" value="energy"> Avoir plus d’énergie</label>
+            <label><input type="checkbox" name="onbGoals" value="body"> Me sentir mieux dans mon corps</label>
+            <label><input type="checkbox" name="onbGoals" value="habit"> Créer de meilleures habitudes</label>
+          </div>
+          <h3>Protéger l’application ?</h3>
+          <label><input type="radio" name="lockapp" value="yes"> Oui</label>
+          <label><input type="radio" name="lockapp" value="no" checked> Non</label>
+          <div id="pinBlock">
+            <input id="onbPin" type="password" maxlength="6" placeholder="Choisir un code PIN">
+            <input id="onbPinConfirm" type="password" maxlength="6" placeholder="Confirmer le code PIN">
+          </div>
+          <select id="onbQuestion" class="field">
+            <option>Nom de votre premier animal ?</option>
+            <option>Ville de naissance ?</option>
+            <option>Couleur préférée ?</option>
+            <option>Plat préféré enfant ?</option>
           </select>
+          <input id="onbAnswer" class="field" type="text" placeholder="Votre réponse">
         </div>
         <div class="field-wrap">
           <label class="label" data-i18n="onboarding.height"></label>
@@ -73,24 +88,17 @@
           <input id="onbWeight" class="field" type="number" min="30" max="300" step="0.1" />
         </div>
         <div class="field-wrap full">
-          <label class="label" data-i18n="onboarding.why"></label>
+          <label class="label">Quels sont vos objectifs ?</label>
           <textarea id="onbWhy" class="field area" rows="3"></textarea>
-        </div>
-        <div class="field-wrap">
-          <label class="label" data-i18n="onboarding.pin"></label>
-          <input id="onbPin" class="field" inputmode="numeric" maxlength="4" />
-        </div>
-        <div class="field-wrap">
-          <label class="label" data-i18n="onboarding.question"></label>
-          <select id="onbQuestion" class="field"></select>
-        </div>
-        <div class="field-wrap full">
-          <label class="label" data-i18n="onboarding.answer"></label>
-          <input id="onbAnswer" class="field" maxlength="60" />
         </div>
       </div>
 
       <div class="modal-actions">
+        <div class="onboard-actions">
+          <button id="btnContinue" type="submit" class="primary-btn">
+            Continuer
+          </button>
+        </div>
         <button id="saveOnboardingBtn" class="btn primary" data-i18n="onboarding.save"></button>
       </div>
     </div>

@@ -30,7 +30,7 @@ window.VMI18n = (() => {
       'onboarding.goal':'Objectif principal',
       'onboarding.height':'Taille (cm)',
       'onboarding.weight':'Poids actuel (kg)',
-      'onboarding.why':'Pourquoi veux-tu avancer ?',
+      'onboarding.why':'Quels sont vos objectifs ?',
       'onboarding.pin':'Code de l’app',
       'onboarding.question':'Question de secours',
       'onboarding.answer':'Réponse de secours',
