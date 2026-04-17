@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr" data-page="journal">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Vmyself - Journal</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="page-top card thin">
+      <div>
+        <div class="eyebrow">Vmyself</div>
+        <h1 data-i18n="journal.title"></h1>
+      </div>
+      <a href="index.html" class="btn ghost" data-i18n="common.back"></a>
+    </header>
+
+    <main class="page-content stack">
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow" data-i18n="journal.dayEyebrow"></div>
+            <h2 data-i18n="journal.dayTitle"></h2>
+          </div>
+          <span class="badge-soft" id="journalDateLabel"></span>
+        </div>
+
+        <div class="grid-2">
+          <div class="field-wrap">
+            <label class="label" data-i18n="journal.water"></label>
+            <input id="waterInput" class="field" type="number" min="0" max="20" step="0.1" />
+          </div>
+          <div class="field-wrap">
+            <label class="label" data-i18n="journal.sleep"></label>
+            <input id="sleepInput" class="field" type="number" min="0" max="16" step="0.1" />
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow" data-i18n="journal.foodEyebrow"></div>
+            <h2 data-i18n="journal.foodTitle"></h2>
+          </div>
+        </div>
+
+        <div class="meal-entry-grid">
+          <input id="mealNameInput" class="field" data-i18n-placeholder="journal.foodName" />
+          <input id="mealCaloriesInput" class="field" type="number" min="0" step="1" data-i18n-placeholder="journal.foodCalories" />
+          <button id="addMealBtn" class="btn soft" data-i18n="journal.addMeal"></button>
+        </div>
+
+        <div id="mealList" class="mini-list"></div>
+        <div class="inline-kpis">
+          <div class="mini-kpi">
+            <span data-i18n="metrics.caloriesDay"></span>
+            <strong id="totalCaloriesDay"></strong>
+          </div>
+          <div class="mini-kpi">
+            <span data-i18n="journal.mealsCount"></span>
+            <strong id="mealCount"></strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow" data-i18n="journal.weightEyebrow"></div>
+            <h2 data-i18n="journal.weightTitle"></h2>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field-wrap">
+            <label class="label" data-i18n="onboarding.weight"></label>
+            <input id="dailyWeightInput" class="field" type="number" min="30" max="300" step="0.1" />
+          </div>
+          <div class="field-wrap">
+            <label class="label" data-i18n="journal.mood"></label>
+            <select id="dailyMoodInput" class="field">
+              <option value="green-dark" data-i18n="status.greenDark"></option>
+              <option value="green-light" data-i18n="status.greenLight"></option>
+              <option value="yellow" data-i18n="status.yellow"></option>
+              <option value="orange" data-i18n="status.orange"></option>
+              <option value="red" data-i18n="status.red"></option>
+            </select>
+          </div>
+          <div class="field-wrap full">
+            <label class="label" data-i18n="journal.note"></label>
+            <textarea id="journalNoteInput" class="field area" rows="3"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <div class="sticky-actions">
+        <button id="saveJournalBtn" class="btn primary wide" data-i18n="common.save"></button>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-link" data-i18n="nav.home"></a>
+      <a href="journal.html" class="nav-link active" data-i18n="nav.journal"></a>
+      <a href="profile.html" class="nav-link" data-i18n="nav.profile"></a>
+      <a href="vault.html" class="nav-link" data-i18n="nav.vault"></a>
+      <a href="settings.html" class="nav-link" data-i18n="nav.settings"></a>
+    </nav>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/journal.js"></script>
+</body>
+</html>

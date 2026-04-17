@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr" data-page="profile">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Vmyself - Profil</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="page-top card thin">
+      <div>
+        <div class="eyebrow">Vmyself</div>
+        <h1 data-i18n="profile.title"></h1>
+      </div>
+      <a href="index.html" class="btn ghost" data-i18n="common.back"></a>
+    </header>
+
+    <main class="page-content stack">
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow" data-i18n="profile.personalEyebrow"></div>
+            <h2 data-i18n="profile.personalTitle"></h2>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field-wrap">
+            <label class="label" data-i18n="onboarding.name"></label>
+            <input id="profileName" class="field" maxlength="40" />
+          </div>
+          <div class="field-wrap">
+            <label class="label" data-i18n="onboarding.age"></label>
+            <input id="profileAge" class="field" type="number" min="12" max="99" />
+          </div>
+          <div class="field-wrap">
+            <label class="label" data-i18n="onboarding.sex"></label>
+            <select id="profileSex" class="field">
+              <option value="female" data-i18n="common.female"></option>
+              <option value="male" data-i18n="common.male"></option>
+              <option value="other" data-i18n="common.other"></option>
+            </select>
+          </div>
+          <div class="field-wrap">
+            <label class="label" data-i18n="onboarding.goal"></label>
+            <select id="profileGoal" class="field">
+              <option value="confidence" data-i18n="goals.confidence"></option>
+              <option value="health" data-i18n="goals.health"></option>
+              <option value="energy" data-i18n="goals.energy"></option>
+              <option value="wellbeing" data-i18n="goals.wellbeing"></option>
+            </select>
+          </div>
+          <div class="field-wrap full">
+            <label class="label" data-i18n="onboarding.why"></label>
+            <textarea id="profileWhy" class="field area" rows="3"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow" data-i18n="profile.bodyEyebrow"></div>
+            <h2 data-i18n="profile.bodyTitle"></h2>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field-wrap">
+            <label class="label" data-i18n="onboarding.height"></label>
+            <input id="profileHeight" class="field" type="number" min="120" max="230" />
+          </div>
+          <div class="field-wrap">
+            <label class="label" data-i18n="onboarding.weight"></label>
+            <input id="profileWeight" class="field" type="number" min="30" max="300" step="0.1" />
+          </div>
+          <div class="field-wrap">
+            <label class="label" data-i18n="profile.targetWeight"></label>
+            <input id="profileTargetWeight" class="field" type="number" min="30" max="300" step="0.1" />
+          </div>
+          <div class="field-wrap">
+            <label class="label" data-i18n="profile.waist"></label>
+            <input id="profileWaist" class="field" type="number" min="30" max="200" step="0.1" />
+          </div>
+        </div>
+
+        <div class="profile-calc-grid">
+          <article class="calc-card">
+            <span class="stat-label" data-i18n="metrics.bmi"></span>
+            <strong id="profileBmi"></strong>
+            <small id="profileBmiLabel"></small>
+          </article>
+          <article class="calc-card">
+            <span class="stat-label" data-i18n="metrics.waistHeight"></span>
+            <strong id="profileWhtr"></strong>
+            <small id="profileWhtrLabel"></small>
+          </article>
+          <article class="calc-card">
+            <span class="stat-label" data-i18n="profile.dailyTarget"></span>
+            <strong id="profileCalorieTarget"></strong>
+            <small data-i18n="profile.dailyTargetHelp"></small>
+          </article>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow" data-i18n="profile.securityEyebrow"></div>
+            <h2 data-i18n="profile.securityTitle"></h2>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field-wrap">
+            <label class="label" data-i18n="settings.pin"></label>
+            <input id="profilePin" class="field" inputmode="numeric" maxlength="4" />
+          </div>
+          <div class="field-wrap">
+            <label class="label" data-i18n="onboarding.question"></label>
+            <select id="profileQuestion" class="field"></select>
+          </div>
+          <div class="field-wrap full">
+            <label class="label" data-i18n="onboarding.answer"></label>
+            <input id="profileAnswer" class="field" maxlength="60" />
+          </div>
+        </div>
+      </section>
+
+      <div class="sticky-actions">
+        <button id="saveProfileBtn" class="btn primary wide" data-i18n="common.save"></button>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-link" data-i18n="nav.home"></a>
+      <a href="journal.html" class="nav-link" data-i18n="nav.journal"></a>
+      <a href="profile.html" class="nav-link active" data-i18n="nav.profile"></a>
+      <a href="vault.html" class="nav-link" data-i18n="nav.vault"></a>
+      <a href="settings.html" class="nav-link" data-i18n="nav.settings"></a>
+    </nav>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

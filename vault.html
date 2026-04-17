@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr" data-page="vault">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Vmyself - Coffre</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="page-top card thin">
+      <div>
+        <div class="eyebrow">Vmyself</div>
+        <h1 data-i18n="vault.title"></h1>
+      </div>
+      <a href="index.html" class="btn ghost" data-i18n="common.back"></a>
+    </header>
+
+    <main class="page-content stack">
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow" data-i18n="vault.eyebrow"></div>
+            <h2 data-i18n="vault.subtitle"></h2>
+          </div>
+        </div>
+
+        <div class="vault-entry">
+          <input id="victoryInput" class="field" data-i18n-placeholder="vault.placeholder" />
+          <button id="addVictoryBtn" class="btn primary" data-i18n="vault.add"></button>
+        </div>
+
+        <div id="victoryList" class="mini-list spacious"></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-link" data-i18n="nav.home"></a>
+      <a href="journal.html" class="nav-link" data-i18n="nav.journal"></a>
+      <a href="profile.html" class="nav-link" data-i18n="nav.profile"></a>
+      <a href="vault.html" class="nav-link active" data-i18n="nav.vault"></a>
+      <a href="settings.html" class="nav-link" data-i18n="nav.settings"></a>
+    </nav>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/vault.js"></script>
+</body>
+</html>

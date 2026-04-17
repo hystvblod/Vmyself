@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr" data-page="home">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Vmyself</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="appLock" class="lock-screen hidden" aria-hidden="true">
+    <div class="lock-card card glass">
+      <div class="brand-mark">V</div>
+      <h1 data-i18n="lock.title"></h1>
+      <p class="muted" data-i18n="lock.subtitle"></p>
+
+      <div class="pin-dots" id="pinDots" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+
+      <input id="pinInput" class="field center" inputmode="numeric" maxlength="4" autocomplete="off" data-i18n-placeholder="lock.pinPlaceholder" />
+      <button id="unlockBtn" class="btn primary" data-i18n="lock.unlock"></button>
+      <button id="openRecoveryBtn" class="btn ghost" data-i18n="lock.forgot"></button>
+
+      <div id="recoveryBox" class="recovery-box hidden">
+        <label class="label" id="recoveryQuestionLabel"></label>
+        <input id="recoveryAnswerInput" class="field" autocomplete="off" data-i18n-placeholder="lock.answerPlaceholder" />
+        <button id="recoveryCheckBtn" class="btn soft" data-i18n="lock.recover"></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="onboardingModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card card">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow" data-i18n="onboarding.eyebrow"></div>
+          <h2 data-i18n="onboarding.title"></h2>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field-wrap">
+          <label class="label" data-i18n="onboarding.name"></label>
+          <input id="onbName" class="field" maxlength="40" />
+        </div>
+        <div class="field-wrap">
+          <label class="label" data-i18n="onboarding.age"></label>
+          <input id="onbAge" class="field" type="number" min="12" max="99" />
+        </div>
+        <div class="field-wrap">
+          <label class="label" data-i18n="onboarding.sex"></label>
+          <select id="onbSex" class="field">
+            <option value="female" data-i18n="common.female"></option>
+            <option value="male" data-i18n="common.male"></option>
+            <option value="other" data-i18n="common.other"></option>
+          </select>
+        </div>
+        <div class="field-wrap">
+          <label class="label" data-i18n="onboarding.goal"></label>
+          <select id="onbGoal" class="field">
+            <option value="confidence" data-i18n="goals.confidence"></option>
+            <option value="health" data-i18n="goals.health"></option>
+            <option value="energy" data-i18n="goals.energy"></option>
+            <option value="wellbeing" data-i18n="goals.wellbeing"></option>
+          </select>
+        </div>
+        <div class="field-wrap">
+          <label class="label" data-i18n="onboarding.height"></label>
+          <input id="onbHeight" class="field" type="number" min="120" max="230" />
+        </div>
+        <div class="field-wrap">
+          <label class="label" data-i18n="onboarding.weight"></label>
+          <input id="onbWeight" class="field" type="number" min="30" max="300" step="0.1" />
+        </div>
+        <div class="field-wrap full">
+          <label class="label" data-i18n="onboarding.why"></label>
+          <textarea id="onbWhy" class="field area" rows="3"></textarea>
+        </div>
+        <div class="field-wrap">
+          <label class="label" data-i18n="onboarding.pin"></label>
+          <input id="onbPin" class="field" inputmode="numeric" maxlength="4" />
+        </div>
+        <div class="field-wrap">
+          <label class="label" data-i18n="onboarding.question"></label>
+          <select id="onbQuestion" class="field"></select>
+        </div>
+        <div class="field-wrap full">
+          <label class="label" data-i18n="onboarding.answer"></label>
+          <input id="onbAnswer" class="field" maxlength="60" />
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="saveOnboardingBtn" class="btn primary" data-i18n="onboarding.save"></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="crackModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card card crack-card">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow" data-i18n="crack.eyebrow"></div>
+          <h2 data-i18n="crack.title"></h2>
+        </div>
+      </div>
+      <p class="support-line" id="crackSupportText"></p>
+      <div class="affirmation-box" id="motivationCard"></div>
+      <div class="tips-list" id="crackTips"></div>
+      <div class="modal-actions">
+        <button id="saveSmallVictoryBtn" class="btn soft" data-i18n="crack.saveVictory"></button>
+        <button id="closeCrackBtn" class="btn primary" data-i18n="crack.ok"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-main">
+        <div>
+          <div class="eyebrow">Vmyself</div>
+          <h1 class="app-title" data-i18n="home.title"></h1>
+          <p class="muted" id="welcomeLine"></p>
+        </div>
+        <div class="topbar-actions">
+          <button id="privacyToggleBtn" class="icon-btn" title="Masquer"></button>
+          <button id="openOnboardingBtn" class="icon-btn" title="Profil"></button>
+        </div>
+      </div>
+
+      <div class="hero-gradient card">
+        <div class="hero-copy">
+          <span class="badge-soft" id="dailyStatusBadge"></span>
+          <h2 id="mainEncouragement"></h2>
+          <p id="dailyAdvice" class="muted strong"></p>
+        </div>
+        <div class="hero-actions">
+          <button id="crackBtn" class="btn danger" data-i18n="home.crack"></button>
+          <a href="journal.html" class="btn primary" data-i18n="home.logToday"></a>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content home-grid">
+      <section class="card metrics-card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow" data-i18n="home.sectionHealth"></div>
+            <h2 data-i18n="home.todayHealth"></h2>
+          </div>
+          <a href="profile.html" class="text-link" data-i18n="common.edit"></a>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-pill">
+            <span class="stat-label" data-i18n="metrics.weight"></span>
+            <strong id="weightValue"></strong>
+            <small id="weightTrend"></small>
+          </article>
+          <article class="stat-pill">
+            <span class="stat-label" data-i18n="metrics.bmi"></span>
+            <strong id="bmiValue"></strong>
+            <small id="bmiLabel"></small>
+          </article>
+          <article class="stat-pill">
+            <span class="stat-label" data-i18n="metrics.waistHeight"></span>
+            <strong id="waistValue"></strong>
+            <small id="waistLabel"></small>
+          </article>
+          <article class="stat-pill">
+            <span class="stat-label" data-i18n="metrics.caloriesDay"></span>
+            <strong id="caloriesValue"></strong>
+            <small id="caloriesLabel"></small>
+          </article>
+        </div>
+
+        <div class="score-bars">
+          <div class="score-item">
+            <div class="score-head">
+              <span data-i18n="metrics.water"></span>
+              <span id="waterScoreLabel"></span>
+            </div>
+            <div class="bar"><div id="waterBar" class="bar-fill"></div></div>
+          </div>
+          <div class="score-item">
+            <div class="score-head">
+              <span data-i18n="metrics.sleep"></span>
+              <span id="sleepScoreLabel"></span>
+            </div>
+            <div class="bar"><div id="sleepBar" class="bar-fill"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow" data-i18n="home.sectionStatus"></div>
+            <h2 data-i18n="home.dayColorTitle"></h2>
+          </div>
+        </div>
+
+        <div class="color-legend" id="colorLegend"></div>
+
+        <div class="daily-status-box" id="dailyStatusBox">
+          <div class="status-dot" id="statusDot"></div>
+          <div>
+            <strong id="statusTitle"></strong>
+            <p class="muted" id="statusText"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow" data-i18n="home.sectionWins"></div>
+            <h2 data-i18n="home.vaultTitle"></h2>
+          </div>
+          <a href="vault.html" class="text-link" data-i18n="common.open"></a>
+        </div>
+        <div id="vaultPreview" class="mini-list"></div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow" data-i18n="home.sectionActions"></div>
+            <h2 data-i18n="home.quickActions"></h2>
+          </div>
+        </div>
+        <div class="quick-actions">
+          <a class="action-card" href="journal.html">
+            <span class="action-icon">🍽️</span>
+            <span data-i18n="nav.journal"></span>
+          </a>
+          <a class="action-card" href="profile.html">
+            <span class="action-icon">📏</span>
+            <span data-i18n="nav.profile"></span>
+          </a>
+          <a class="action-card" href="vault.html">
+            <span class="action-icon">🔐</span>
+            <span data-i18n="nav.vault"></span>
+          </a>
+          <a class="action-card" href="shop.html">
+            <span class="action-icon">✨</span>
+            <span data-i18n="nav.shop"></span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-link active" data-i18n="nav.home"></a>
+      <a href="journal.html" class="nav-link" data-i18n="nav.journal"></a>
+      <a href="profile.html" class="nav-link" data-i18n="nav.profile"></a>
+      <a href="vault.html" class="nav-link" data-i18n="nav.vault"></a>
+      <a href="settings.html" class="nav-link" data-i18n="nav.settings"></a>
+    </nav>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ads.js"></script>
+  <script src="js/purchases.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
