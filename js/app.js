@@ -225,13 +225,20 @@ window.VMApp = (() => {
     document.getElementById('onbName').value = state.profile.name || '';
     document.getElementById('onbAge').value = state.profile.age || '';
     document.getElementById('onbSex').value = state.profile.sex || 'female';
-    document.getElementById('onbGoal').value = state.profile.goal || 'health';
+    const selectedGoals = new Set(state.profile.goals || (state.profile.goal ? [state.profile.goal] : ['health']));
+    document.querySelectorAll('input[name="onbGoals"]').forEach((checkbox) => {
+      checkbox.checked = selectedGoals.has(checkbox.value);
+    });
     document.getElementById('onbHeight').value = state.profile.heightCm || '';
     document.getElementById('onbWeight').value = state.profile.weightKg || '';
     document.getElementById('onbWhy').value = state.profile.why || '';
     document.getElementById('onbPin').value = state.profile.pin || '';
     document.getElementById('onbQuestion').value = state.profile.recoveryQuestionKey || 'pet';
     document.getElementById('onbAnswer').value = state.profile.recoveryAnswer || '';
+    const lockPref = state.profile.pin ? 'yes' : 'no';
+    const lockRadio = document.querySelector(`input[name="lockapp"][value="${lockPref}"]`);
+    if(lockRadio) lockRadio.checked = true;
+    togglePinBlock();
   }
 
   function fillRecoveryQuestions(select, selectedKey){
@@ -242,18 +249,27 @@ window.VMApp = (() => {
   }
 
   function saveOnboarding(){
+    const selectedGoals = Array.from(document.querySelectorAll('input[name="onbGoals"]:checked')).map((input) => input.value);
+    const lockEnabled = document.querySelector('input[name="lockapp"]:checked')?.value === 'yes';
+    const pin = (document.getElementById('onbPin').value || '').trim();
+    const pinConfirm = (document.getElementById('onbPinConfirm').value || '').trim();
     const payload = {
       name: document.getElementById('onbName').value.trim(),
       age: document.getElementById('onbAge').value.trim(),
       sex: document.getElementById('onbSex').value,
-      goal: document.getElementById('onbGoal').value,
+      goal: selectedGoals[0] || 'health',
+      goals: selectedGoals,
       heightCm: document.getElementById('onbHeight').value.trim(),
       weightKg: document.getElementById('onbWeight').value.trim(),
       why: document.getElementById('onbWhy').value.trim(),
-      pin: document.getElementById('onbPin').value.trim(),
+      pin: lockEnabled ? pin : '',
       recoveryQuestionKey: document.getElementById('onbQuestion').value,
       recoveryAnswer: document.getElementById('onbAnswer').value.trim()
     };
+    if(lockEnabled && pin !== pinConfirm){
+      VMUI.toast('Les codes PIN ne correspondent pas.');
+      return;
+    }
     if(!payload.name || !payload.heightCm || !payload.weightKg){
       VMUI.toast('Complète au moins prénom, taille et poids.');
       return;
@@ -279,6 +295,25 @@ window.VMApp = (() => {
   }
 
   document.addEventListener('DOMContentLoaded', renderHome);
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input[name="lockapp"]').forEach((radio) => {
+      radio.addEventListener('change', togglePinBlock);
+    });
+    togglePinBlock();
+  });
+
+  function togglePinBlock(){
+    const pinBlock = document.getElementById('pinBlock');
+    if(!pinBlock) return;
+    const lockEnabled = document.querySelector('input[name="lockapp"]:checked')?.value === 'yes';
+    pinBlock.style.display = lockEnabled ? 'block' : 'none';
+  }
+
+  document.getElementById("btnContinue")?.addEventListener("click",(e)=>{
+    e.preventDefault();
+    saveOnboarding();
+    window.location.href = "pages/home.html";
+  });
 
   window.VMShared = { todayKey, calcBMI, bmiLabel, calcWHtR, whtrLabel, estimateCalories, addVictory };
   return { renderHome };

@@ -645,6 +645,33 @@ button, input, select, textarea{ font:inherit; }
   user-select:none;
 }
 
+.primary-btn{
+width:100%;
+padding:16px;
+border:none;
+border-radius:14px;
+background:linear-gradient(90deg,#5ecbff,#ff7fc8);
+color:#fff;
+font-size:18px;
+font-weight:700;
+}
+
+.goal-list label{
+display:block;
+padding:10px;
+margin:8px 0;
+background:#ffffff90;
+border-radius:12px;
+}
+
+#pinBlock input{
+display:block;
+width:100%;
+margin:8px 0;
+padding:12px;
+border-radius:10px;
+}
+
 @media (max-width: 960px){
   .home-grid{
     grid-template-columns: 1fr;
